@@ -16,11 +16,28 @@ class Empleado extends BaseController
         helper(['form']);
     }
 
+    // LISTADO + BÚSQUEDA (igual que Equipos: empleado?q=texto)
     public function index()
     {
+        $q = $this->request->getGet('q');
+
+        $builder = $this->empleadoModel;
+
+        if ($q) {
+            $builder = $builder
+                ->groupStart()
+                    ->like('Id_Empleado', $q)
+                    ->orLike('Nombres', $q)
+                    ->orLike('ApellidoP', $q)
+                    ->orLike('ApellidoM', $q)
+                    ->orLike('UserName', $q)
+                    ->orLike('Correo', $q)
+                ->groupEnd();
+        }
+
         $data = [
-            'empleados' => $this->empleadoModel->findAll(),
-            'empleadoEdit' => null, // para formulario vacío (alta)
+            'empleados' => $builder->findAll(),
+            'q'         => $q,
         ];
 
         return view('Panel/CRUD_empleado', $data);
@@ -43,13 +60,14 @@ class Empleado extends BaseController
         }
 
         $password = $this->request->getPost('Password');
+
         $data = [
             'Nombres'      => $this->request->getPost('Nombres'),
             'ApellidoP'    => $this->request->getPost('ApellidoP'),
             'ApellidoM'    => $this->request->getPost('ApellidoM'),
             'UserName'     => $this->request->getPost('UserName'),
             'Correo'       => $this->request->getPost('Correo') ?: null,
-            'PasswordHash' => hash('sha256', $password), // igual que en MariaDB SHA2(,256)
+            'PasswordHash' => hash('sha256', $password),
         ];
 
         $this->empleadoModel->insert($data);
@@ -58,6 +76,8 @@ class Empleado extends BaseController
         return redirect()->to(site_url('empleado'));
     }
 
+    // Si todavía usas /empleado/edit/ID en otra vista, puedes dejarlo.
+    // Con la vista estilo Equipos (modal), ya no es necesario usar edit().
     public function edit($id)
     {
         $empleado = $this->empleadoModel->find($id);
@@ -68,8 +88,8 @@ class Empleado extends BaseController
         }
 
         $data = [
-            'empleados'   => $this->empleadoModel->findAll(),
-            'empleadoEdit'=> $empleado,
+            'empleados'    => $this->empleadoModel->findAll(),
+            'empleadoEdit' => $empleado,
         ];
 
         return view('Panel/CRUD_empleado', $data);
@@ -91,9 +111,8 @@ class Empleado extends BaseController
             'Correo'    => "permit_empty|valid_email|is_unique[empleado.Correo,Id_Empleado,{$id}]",
         ];
 
-        // Si el usuario quiere cambiar contraseña
-        $password     = $this->request->getPost('Password');
-        $password2    = $this->request->getPost('Password2');
+        $password  = $this->request->getPost('Password');
+        $password2 = $this->request->getPost('Password2');
 
         if (!empty($password) || !empty($password2)) {
             $rules['Password']  = 'required|min_length[6]';
@@ -112,7 +131,6 @@ class Empleado extends BaseController
             'Correo'    => $this->request->getPost('Correo') ?: null,
         ];
 
-        // Solo actualizar contraseña si se capturó una nueva
         if (!empty($password)) {
             $dataUpdate['PasswordHash'] = hash('sha256', $password);
         }
@@ -136,21 +154,27 @@ class Empleado extends BaseController
         return redirect()->to(site_url('empleado'));
     }
 
-    public function buscar(){
-        $texto = $this->request->getGet('q');
+    // Si quieres conservar la ruta /empleado/buscar, aquí está corregida:
+    public function buscar()
+    {
+        $q = $this->request->getGet('q');
 
-    $empleado = $this->empleadoModel
-        ->like('Nombres', $texto)
-        ->orLike('UserName', $texto)
-        ->orLike('ApellidoP', $texto)
-        ->orlike('ApellidoM', $texto)
-        ->findAll();
+        $empleados = $this->empleadoModel
+            ->groupStart()
+                ->like('Id_Empleado', $q)
+                ->orLike('Nombres', $q)
+                ->orLike('ApellidoP', $q)
+                ->orLike('ApellidoM', $q)
+                ->orLike('UserName', $q)
+                ->orLike('Correo', $q)
+            ->groupEnd()
+            ->findAll();
 
-    $data = [
-        'empleado' => $empleado,
-        'q'       => $texto,
-    ];
+        $data = [
+            'empleados' => $empleados, // ✅ plural (igual que la vista)
+            'q'         => $q,
+        ];
 
-    return view('Panel/CRUD_empleado', $data);
+        return view('Panel/CRUD_empleado', $data);
     }
 }

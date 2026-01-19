@@ -15,7 +15,8 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url(RECURSO_PANEL_DIST . '/css/adminlte.min.css') ?>">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
+
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -92,16 +93,15 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('') ?>" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
+            <a href="<?= base_url('usuario-equipo') ?>" class="nav-link">
+              <i class="nav-icon fas fa-link"></i>
               <p>Usuarios y equipos</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="<?= base_url('') ?>" class="nav-link">
-              <i class="nav-icon fas fa-ring"></i>
-              <p>Mantenimientos</p>
+             <i class="nav-icon fas fa-tools"></i><p>Mantenimientos</p>
             </a>
           </li>
         </ul>

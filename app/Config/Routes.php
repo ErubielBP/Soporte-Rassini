@@ -36,4 +36,25 @@ $routes->group('equipos', ['namespace' => 'App\Controllers'], function($routes) 
 $routes->get('equipos/buscar', 'EquipoComputo::buscar');
 
 
+//equipo_usuario 
+
+$routes->group('usuario-equipo', ['filter' => 'auth'], function($routes) {
+    $routes->get('/', 'UsuarioEquipo::index');
+    $routes->get('buscar', 'UsuarioEquipo::buscar');
+    $routes->post('guardar', 'UsuarioEquipo::guardar');
+    $routes->post('actualizar/(:num)', 'UsuarioEquipo::actualizar/$1');
+    $routes->post('eliminar/(:num)', 'UsuarioEquipo::eliminar/$1');
+});
+
+//mantenimientos
+$routes->group('mantenimientos', ['filter' => 'auth'], function($routes) {
+    $routes->get('/', 'Mantenimientos::index');
+    $routes->get('buscar', 'Mantenimientos::buscar');
+    $routes->post('guardar', 'Mantenimientos::guardar');
+    $routes->post('actualizar/(:num)', 'Mantenimientos::actualizar/$1');
+    $routes->post('eliminar/(:num)', 'Mantenimientos::eliminar/$1');
+});
+
+
+
 

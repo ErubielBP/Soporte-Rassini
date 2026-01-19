@@ -15,7 +15,8 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?= base_url(RECURSO_PANEL_DIST . '/css/adminlte.min.css') ?>">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
+
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
@@ -82,12 +83,41 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="<?= base_url('Panel/index') ?>" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Inicio
-                <!-- <i class="right fas fa-angle-left"></i> -->
               </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="<?= base_url('empleado') ?>" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Usuarios
+              </p>
+            </a>
+          </li>     
+          <li class="nav-item">
+            <a href="<?= base_url('equipos') ?>" class="nav-link">
+              <i class="nav-icon fas fa-desktop  "></i>
+              <p>
+                Equipos de computo
+              </p>
+            </a>
+          </li>
+            <li class="nav-item">
+            <a href="<?= base_url('usuario-equipo') ?>" class="nav-link">
+              <i class="nav-icon fas fa-link"></i>
+              <p>
+                Usuarios y equipos
+              </p>
+            </a>
+          </li>
+                      <li class="nav-item">
+            <a href="<?= base_url('mantenimientos') ?>" class="nav-link">
+             <i class="nav-icon fas fa-tools"></i><p>Mantenimientos</p>
             </a>
           </li>
         </ul>
