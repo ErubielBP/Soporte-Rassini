@@ -21,7 +21,7 @@ $routes->group('empleado', ['filter' => 'auth'], function($routes) {
     $routes->post('store', 'Empleado::store');
     $routes->get('edit/(:num)', 'Empleado::edit/$1');
     $routes->post('update/(:num)', 'Empleado::update/$1');
-    $routes->get('delete/(:num)', 'Empleado::delete/$1');
+    $routes->post('delete/(:num)', 'Empleado::delete/$1');
 });
 $routes->get('empleado/buscar', 'Empleado::buscar');
 
